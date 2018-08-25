@@ -1,33 +1,38 @@
-
 version: '3'
 
 services:
-  api:
-    image: strapi/strapi
+  prebootstrapi:
+    # image: preboot/strapi
+    build: ./build-img-docker/all-in-one/preboot/
+  bootstrapi:
+    # image: boot/strapi
+    build: ./build-img-docker/all-in-one
     environment:
-      - APP_NAME=strapi-app
+      - APP_NAME=instance-bootstrapi
       - DATABASE_CLIENT=mongo
       - DATABASE_HOST=db
       - DATABASE_PORT=27017
-      - DATABASE_NAME=strapi
+      - DATABASE_NAME=bootstrapi_db
       - DATABASE_USERNAME=
       - DATABASE_PASSWORD=
       - HOST=localhost
     ports:
       - 1337:1337
-    volumes:
-      - ./strapi-app:/usr/src/api/strapi-app
+#    volumes:
+      #- ./strapi-app:/usr/src/api/strapi-app
       #- /usr/src/api/strapi-app/node_modules
     depends_on:
-      - db
+      - prebootstrapi
+      - bdd_strapi
+
     restart: always
 
-  db:
+  bdd_strapi:
     image: mongo
     environment:
-      - MONGO_INITDB_DATABASE=strapi
+      - MONGO_INITDB_DATABASE=bootstrapi
     ports:
       - 27017:27017
     volumes:
-      - ./db:/data/db
-restart: always
+      - ./db:./donnees/strapi/db
+    restart: always
