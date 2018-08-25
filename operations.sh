@@ -2,7 +2,7 @@
 
 # - ENV
 # - 
-export MAISON=$(pwd)/provision-bosstrapi
+export MAISON=$(pwd)
 export STRAPI_ENV=production
 export NOM_IMAGE=bootstrapi
 export VERSION_IMAGE=1.0.0
