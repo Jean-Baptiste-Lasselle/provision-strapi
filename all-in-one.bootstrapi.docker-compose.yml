@@ -17,7 +17,7 @@ services:
     build: 
       context: ./build-img-docker/all-in-one/marguerite/npm/
       args:
-        - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT="https://github.com/Jean-Baptiste-Lasselle/npm-registry-couchapp"
+        - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT="https://github.com/npm/npm-registry-couchapp"
         - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
         # le nom d'hôte réseau "marguerite_npm_bdd", est résolu, dans le conteneur "marguerite_npm", par docker, et non par une configuration du reverse proxy NGINX. 
         # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
