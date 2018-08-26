@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+  marguerite_reverse_proxy:
+    image: marguerite/nginx:1.0.0
+    build:
+      context: ./provision-marguerite/build-img-docker/all-in-one/marguerite/nginx/
+    ports:
+      # - 8091-8094:8091-8094
+      - 80:80
+    volumes:
+      # - /host/path/nginx.conf:/etc/nginx/nginx.conf:rw
+      - /host/path/nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+# TODO :  rajouter le service NGINX pour servir toutes les URLs, 
+# TODO : faire la recette terraform / ansible pour provisionner la configuration du serveur DNS dans une VM dédiée, différente de l'hôte Docker, et la configuration du serveur DNS de la machine utilisée pour tester strapi, avec un Firefox / mozilla. 
+  marguerite_npm_bdd: 
+    # https://hub.docker.com/r/couchbase/server/
+    # https://developer.couchbase.com/documentation/server/3.x/admin/CLI/cbreset_password_tool.html
+    # https://developer.couchbase.com/documentation/server/4.1/install/init-setup.html ==>> tout particulièrement pour réaliser la configuration du user initial à l'installation de couchbase 
+    # https://developer.couchbase.com/documentation/server/4.1/install/setup-cli-rest.html
+    # image: couchbase/server 
+    build:
+      context: ./provision-marguerite/build-img-docker/all-in-one/marguerite/npm-couchdb/
+    ports:
+      - 8091-8094:8091-8094
+      - 11210:11210
+    restart: always
+  # la BDD devra donc être accédée, par le conteneur "marguerite_npm" , via le private network docker, avec la requête http://marguerite_npm_bdd:8091/pools
+  marguerite_npm:
+    # https://github.com/npm/npm-registry-couchapp
+    image: marguerite/npm-registry:1.0.0
+    build: 
+      context: ./provision-marguerite/build-img-docker/all-in-one/marguerite/npm/
+      args:
+        - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT=https://github.com/npm/npm-registry-couchapp
+        - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
+        # le nom d'hôte réseau "marguerite_npm_bdd", est résolu, dans le conteneur "marguerite_npm", par docker, et non par une configuration du reverse proxy NGINX. 
+        # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
+        - HOTE_RESEAU_DU_REGISTRY_NPM_DEFAUT=localhost
+        - NO_PORT_DU_REGISTRY_NPM_DEFAUT=5984
+        - HOTE_RESEAU_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite_npm_bdd
+        - NO_PORT_BDD_DU_REGISTRY_NPM_DEFAUT=8091
+        - USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
+        - USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
+        - FIRST_USER_NAME_DU_REGISTRY_NPM_DEFAUT=admin
+        - FIRST_USER_PWD_DU_REGISTRY_NPM_DEFAUT=password
+    environment:
+      # - Le code source de npm registry couchbase // https://github.com/npm/npm-registry-couchapp/releases/tag/v2.7.1
+      - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=https://github.com/npm/npm-registry-couchapp
+      - VERSION_CODE_SOURCE_NPMREGISTRY=2.7.0
+      # - L'hôte réseau serveur, pour le npm registry privé
+      - HOTE_RESEAU_DU_REGISTRY_NPM=localhost
+      - NO_PORT_DU_REGISTRY_NPM=5984
+      # - le premier utilsiateur existant après installation / démarrage du registry npm privé
+      - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
+      - FIRST_USER_PWD_DU_REGISTRY_NPM=password
+      # - La BDD CoucheBase, du registry NPM
+      - HOTE_RESEAU_BDD_DU_REGISTRY_NPM=marguerite_npm_bdd
+      - NO_PORT_BDD_DU_REGISTRY_NPM=8091
+      - USER_NAME_BDD_DU_REGISTRY_NPM=marguerite
+      - USER_PWD_BDD_DU_REGISTRY_NPM=marguerite
+    depends_on:
+      - marguerite_npm_bdd
+    restart: always
+  build_bootstrapi:
+    image: build/bootstrapi:1.0.0
+    build: 
+      context: ./provision-marguerite/build-img-docker/all-in-one/build_bootstrapi/
+      args: # je préfèrerai que cette URL soit chargée dynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
+        - URI_REPO_GIT_DEVELOPPEURS_DEFAUT=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+        - URI_PRIVATE_NPM_REGISTRY_DEFAUT=http://marguerite_npm:5984/registry/_design/app/_rewrite
+    environment: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
+      - URI_REPO_GIT_DEVELOPPEURS=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+    # Ce conteneur va builder le code source provenant du git repo utilisé par les développeurs, et publier l'archive sur le registry NPM privé "marguerite_npm"
+      - URI_PRIVATE_NPM_REGISTRY=http://marguerite_npm:5984/registry/_design/app/_rewrite
+    depends_on:
+      - marguerite_npm

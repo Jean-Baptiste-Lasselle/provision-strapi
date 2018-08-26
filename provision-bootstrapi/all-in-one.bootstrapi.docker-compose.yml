@@ -7,7 +7,7 @@ services:
   bootstrapi:
     # image: boot/bootiestrapi:v1.0.0
     build: 
-      context: ./provision-bootstrapi/build-img-docker/all-in-one/
+      context: ./build-img-docker/all-in-one/
     environment:
       - APP_NAME=instance-bootstrapi
       - DATABASE_CLIENT=mongo
