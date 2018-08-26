@@ -42,8 +42,19 @@ RUN yum update -y && yum install -y curl wget tree git
 # installation de couchbase 
 RUN echo " Installation de CouchBAse : https://developer.couchbase.com/documentation/server/4.1/install/setup-cli-rest.html "
 RUN echo "You need CouchDB version 1.4.0 or higher. 1.5.0 or higher is best. So i'm gonna install it for you."
+
 RUN echo " +++ // Setup Administrator username and password"
 RUN curl -v -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/settings/web -d password=$USER_PWD_BDD_DU_REGISTRY_NPM -d username=$USER_NAME_BDD_DU_REGISTRY_NPM
+RUN echo " +++ // Setup services that couchbase will run"
+RUN curl -u username=[$USER_NAME_BDD_DU_REGISTRY_NPM]&password=[$USER_PWD_BDD_DU_REGISTRY_NPM] -v -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/node/controller/setupServices -d services=data,index,query,moxi
+RUN echo " celui là je ne sais pas à quoi il sert, donc je ne l'exécute pas : # Initialize Node # curl -v -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/nodes/self/controller/settings -d path=[location] -d index_path=[location] "
+RUN echo " celui là je ne sais pas à quoi il sert, donc je ne l'exécute pas : # Setup Bucket # curl -v -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/pools/default/buckets -d ramQuotaMB=[value]"
+RUN echo " celui là je ne sais pas à quoi il sert, donc je ne l'exécute pas : # Setup Index RAM Quota # curl -u username=[admin]&password=[password] -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/pools/default -d memoryQuota=[value] -d indexMemoryQuota=[value]" 
+
+
+
+
+# et c'est la manière dont la doc npmregistry-couchbase-app recommande de créer la BDD couchbase du registry :
 RUN echo " +++ Once you have CouchDB installed, create a new database: curl -X PUT http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/registry "
 RUN curl -X PUT http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
 # - build from source 
@@ -64,8 +75,8 @@ RUN echo " "
 RUN npm --version
 RUN echo " "
 RUN echo " "
-RUN mkdir -p build-from-source
-WORKDIR build-from-source
+RUN mkdir -p /opt/marguerite/npm-registry/
+WORKDIR /opt/marguerite/npm-registry/
 RUN echo " "
 RUN echo " URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=$URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY "
 RUN echo " "
