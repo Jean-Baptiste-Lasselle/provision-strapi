@@ -25,7 +25,7 @@ ENV NO_VERSION_BOOOTSTRAPI_DE_DEPART=$NO_VERSION_BOOOTSTRAPI_DE_DEPART_PAR_DEFAU
 ARG NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT
 ENV NO_VERSION_PUBLICATION_BOOOTSTRAPI=$NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT
 
-RUN yum update -y && yum install -y wget git curl  
+RUN yum update -y && yum install -y wget git curl sed
 
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
@@ -53,7 +53,7 @@ RUN echo " "
 RUN echo " - ++ CYCLE DEV ++ on appliquera un changement mineur dans le code source, puis on change de numéro de version dans le package.json, en vue de la publication :  " 
 RUN echo " "
 RUN echo " "
-sed -i 's/$NO_VERSION_BOOOTSTRAPI_DE_DEPART/$NO_VERSION_PUBLICATION_BOOOTSTRAPI/g' ./package.json
+RUN sed -i 's/$NO_VERSION_BOOOTSTRAPI_DE_DEPART/$NO_VERSION_PUBLICATION_BOOOTSTRAPI/g' ./package.json
 RUN echo " "
 RUN echo " "
 RUN echo " - ++ CYCLE DEV ++ puis suit à la lettre, la procédure indiquée pour commencer le développement avec strapi."
