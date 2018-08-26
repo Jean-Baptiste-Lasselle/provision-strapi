@@ -19,7 +19,7 @@ ENV URI_REPO_GIT_DEVELOPPEURS=$URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 ARG URI_PRIVATE_NPM_REGISTRY_DEFAUT
 ENV URI_PRIVATE_NPM_REGISTRY=$URI_PRIVATE_NPM_REGISTRY_DEFAUT
 
-RUN yum update -y && yum install - y git curl  
+RUN yum update -y && yum install -y wget git curl  
 
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
