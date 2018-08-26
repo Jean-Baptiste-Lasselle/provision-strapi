@@ -14,7 +14,7 @@ services:
   marguerite_npm:
     # https://github.com/npm/npm-registry-couchapp
     image: marguerite/npm-registry:1.0.0
-    build: ./build-img-docker/all-in-one/marguerite/npm
+    build: ./build-img-docker/all-in-one/marguerite/npm/
       args:
         - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT="https://github.com/Jean-Baptiste-Lasselle/npm-registry-couchapp"
         - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
@@ -57,7 +57,7 @@ services:
       - marguerite_npm
   bootstrapi:
     # image: boot/strapi
-    build: ./build-img-docker/all-in-one
+    build: ./build-img-docker/all-in-one/
     environment:
       - APP_NAME=instance-bootstrapi
       - DATABASE_CLIENT=mongo
