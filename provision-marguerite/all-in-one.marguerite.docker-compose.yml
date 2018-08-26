@@ -70,9 +70,13 @@ services:
       args: # je préfèrerai que cette URL soit chargée dynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
         - URI_REPO_GIT_DEVELOPPEURS_DEFAUT=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
         - URI_PRIVATE_NPM_REGISTRY_DEFAUT=http://marguerite_npm:5984/registry/_design/app/_rewrite
+        - NO_VERSION_BOOOTSTRAPI_DE_DEPART_PAR_DEFAUT=3.0.0-alpha.13.1
+        - NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT=1.0.0
     environment: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
       - URI_REPO_GIT_DEVELOPPEURS=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
     # Ce conteneur va builder le code source provenant du git repo utilisé par les développeurs, et publier l'archive sur le registry NPM privé "marguerite_npm"
       - URI_PRIVATE_NPM_REGISTRY=http://marguerite_npm:5984/registry/_design/app/_rewrite
+      - ENV NO_VERSION_PUBLICATION_BOOOTSTRAPI=3.0.0-alpha.13.1
+      - ENV NO_VERSION_BOOOTSTRAPI_DE_DEPART=1.0.0
     depends_on:
       - marguerite_npm

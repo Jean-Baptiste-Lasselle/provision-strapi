@@ -10,10 +10,13 @@ LABEL maintainer="Jean-Baptiste Lasselle <jean.baptiste.lasselle.it@gmail.com>" 
       org.label-schema.schema-version="1.0.0"
 
 
-ARG URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 ARG URI_PRIVATE_NPM_REGISTRY_DEFAUT
-ENV NUMERO_VERSION_BOOTSTRAPI=$URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 ENV URI_PRIVATE_NPM_REGISTRY=$URI_PRIVATE_NPM_REGISTRY_DEFAUT
+
+ARG NO_VERSION_BOOOTSTRAPI_PAR_DEFAUT
+ENV NUMERO_VERSION_BOOTSTRAPI=$NO_VERSION_BOOOTSTRAPI_PAR_DEFAUT
+
+
 WORKDIR /usr/src/api
 
 # - on va donc installer le package publié avec la modification de code des développeurs, donc bootstrapi@$NUMERO_VERSION_BOOTSTRAPI

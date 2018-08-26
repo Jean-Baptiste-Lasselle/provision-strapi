@@ -19,6 +19,12 @@ ENV URI_REPO_GIT_DEVELOPPEURS=$URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 ARG URI_PRIVATE_NPM_REGISTRY_DEFAUT
 ENV URI_PRIVATE_NPM_REGISTRY=$URI_PRIVATE_NPM_REGISTRY_DEFAUT
 
+ARG NO_VERSION_BOOOTSTRAPI_DE_DEPART_PAR_DEFAUT
+ENV NO_VERSION_BOOOTSTRAPI_DE_DEPART=$NO_VERSION_BOOOTSTRAPI_DE_DEPART_PAR_DEFAUT
+
+ARG NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT
+ENV NO_VERSION_PUBLICATION_BOOOTSTRAPI=$NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT
+
 RUN yum update -y && yum install -y wget git curl  
 
 RUN # - Installation configuration nodejs / npm 
@@ -44,82 +50,39 @@ RUN echo " "
 RUN ls -all
 RUN echo " "
 RUN echo " "
-RUN echo " - ++ CYCLE DEV ++ on commence par suivre à la lettre, la procédure indiquée pour commencer le développement avec strapi : on appliquera un changement mineur dans le code source."
+RUN echo " - ++ CYCLE DEV ++ on appliquera un changement mineur dans le code source, puis on change de numéro de version dans le package.json, en vue de la publication :  " 
+RUN echo " "
+RUN echo " "
+sed -i 's/$NO_VERSION_BOOOTSTRAPI_DE_DEPART/$NO_VERSION_PUBLICATION_BOOOTSTRAPI/g' ./package.json
+RUN echo " "
+RUN echo " "
+RUN echo " - ++ CYCLE DEV ++ puis suit à la lettre, la procédure indiquée pour commencer le développement avec strapi."
 # cf. 
 RUN echo " "
 RUN echo " "
 RUN echo "[ RUN : npm install && npm build]"
+RUN echo "[ RUN : npm run setup --build]"
 RUN echo " "
 RUN echo " "
-RUN npm install && npm build
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo "[ RUN : npm build --plugins]"
-RUN echo " "
-RUN echo " "
-RUN npm build --plugins
+# RUN npm install 
+RUN npm run setup --build
 RUN echo " "
 RUN echo " "
 RUN echo " "
 RUN echo " "
-# RUN echo "[ RUN : npm run build]"
-# RUN echo " "
-# RUN echo " "
-# RUN npm run build
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo "[ RUN : npm run build --plugins]"
-# RUN echo " "
-# RUN echo " "
-# RUN npm run build --plugins
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo "[ RUN : npm run setup build]"
-# RUN echo " "
-# RUN echo " "
-# RUN npm run setup build
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo " "
-# RUN echo "[ RUN : npm run setup build --plugins]"
-# RUN echo " "
-# RUN echo " "
-# RUN npm run setup build --plugins
-# RUN echo " "
-# RUN echo " "
+RUN echo "[ RUN : npm run release]"
+RUN echo " "
+RUN echo " "
+# sert uniquement pour exécuter le npm run release, parce que cette variable d'environnement est référencée dans le script d'origine venant de strapi.io, et importé automatiquement dans $URI_REPO_GIT_DEVELOPPEURS
+# cf. $URI_REPO_GIT_DEVELOPPEURS/package.json   => release: ....
+ARG TAG_PAR_DEFAUT=$NO_VERSION_PUBLICATION_BOOOTSTRAPI_PAR_DEFAUT
+ENV TAG_ENV=$TAG_PAR_DEFAUT
+# cf. son utilisation dans ./build-and-publish-bootstrapi.sh
+RUN echo " "
+RUN echo " "
+RUN echo " "
+RUN echo " "
 
-
-RUN echo " "
-RUN echo " "
-RUN echo "[ RUN : npm run setup]"
-RUN echo " "
-RUN echo " "
-# RUN npm run setup
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo "[ RUN : npm run setup --plugins]"
-RUN echo " "
-RUN echo " "
-# RUN npm run setup --plugins
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo " "
-RUN echo "[ RUN : npm run setup --plugins]"
-RUN echo " "
-RUN echo " "
-# RUN npm run setup --plugins
-RUN echo " "
-RUN echo " "
 
 RUN echo " "
 RUN echo " "
@@ -145,7 +108,7 @@ RUN cp ./build-and-publish-bootstrapi.sh /opt/marguerite/build-and-publish-boots
 # - on pourra aussi réaliser l'exécution du build à l'exécution du conteneur
 # Ce travail sera fait par le Jenkins pipeline, déclenché par un push sur le git repo du code source boostrapi, dont
 # la première version (le premier commit & push) provient de'une version bien spécifique de l'officiel strapi.
-CMD [./build-and-publish-bootstrapi.sh]
+CMD [/opt/marguerite/build-and-publish-bootstrapi.sh]
 
 
 
