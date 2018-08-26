@@ -162,3 +162,28 @@ cf. le ./*docker-compose.yml correspondant à la release
 
  https://hub.docker.com/r/couchbase/server/
 
+
+# Dernière erreur
+
+
+```
+Step 28/111 : RUN npm run build && npm run build --plugins && npm run setup --plugins
+ ---> Running in 71708f73254d
+npm ERR! Linux 3.10.0-862.el7.x86_64
+npm ERR! argv "/usr/bin/node" "/usr/bin/npm" "run" "build"
+npm ERR! node v6.14.3
+npm ERR! npm  v3.10.10
+
+npm ERR! missing script: build
+npm ERR! 
+npm ERR! If you need help, you may report this error at:
+npm ERR!     <https://github.com/npm/npm/issues>
+
+npm ERR! Please include the following file with any support request:
+npm ERR!     /projet-developpeur/npm-debug.log
+ERROR: Service 'build_bootstrapi' failed to build: The command '/bin/sh -c npm run build && npm run build --plugins && npm run setup --plugins' returned a non-zero code: 1
+[jibl@pc-100 provision-bootstrapi]$ 
+
+```
+
+
