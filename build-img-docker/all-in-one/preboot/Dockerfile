@@ -19,7 +19,7 @@ ENV URI_REPO_GIT_DEVELOPPEURS=$URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 ARG URI_PRIVATE_NPM_REGISTRY_DEFAUT
 ENV URI_PRIVATE_NPM_REGISTRY=$URI_PRIVATE_NPM_REGISTRY_DEFAUT
 
-RUN yum update -y && yum install - y wget git curl  
+RUN yum update -y && yum install - y git curl  
 
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
@@ -137,14 +137,15 @@ RUN echo " "
 
 # - ++ CYCLE DEV ++ enfin on réalise la procédure de publication sur le registry NPM privé : ds l'infra entreprise
 # - suppose qu'NPM a été configuré, après son installation, ppour faire usage du registry privé npm.marguerite.io
-RUN npm pack
-RUN npm publish --registry $URI_PRIVATE_NPM_REGISTRY
+# RUN npm pack
+# RUN npm publish --registry $URI_PRIVATE_NPM_REGISTRY
+ADD build-and-publish-bootstrapi.sh .
+RUN chmod +x ./build-and-publish-bootstrapi.sh
 # - on pourra aussi réaliser l'exécution du build à l'exécution du conteneur
-# CMD [./build-and-publish-bootstrapi.sh]
 # Ce travail sera fait par le Jenkins pipeline, déclenché par un push sur le git repo du code source boostrapi, dont
 # la première version (le premier commit & push) provient de'une version bien spécifique de l'officiel strapi.
-
-CMD ["/bin/bash"]
+CMD [./build-and-publish-bootstrapi.sh]
+# CMD ["/bin/bash"]
 
 
 

@@ -65,7 +65,7 @@ services:
     depends_on:
       - marguerite_npm
   bootstrapi:
-    # image: boot/strapi
+    # image: boot/bootiestrapi:v1.0.0
     build: 
       context: ./build-img-docker/all-in-one/
     environment:
