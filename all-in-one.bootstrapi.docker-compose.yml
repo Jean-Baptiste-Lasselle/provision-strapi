@@ -1,9 +1,60 @@
 version: '3'
 
 services:
-  prebootstrapi:
-    # image: preboot/strapi
+# TODO :  rajouter le service NGINX pour servir toutes les URLs, 
+# TODO : faire la recette terraform / ansible pour provisionner la configuration du serveur DNS dans une VM dédiée, différente de l'hôte Docker, et la configuration du serveur DNS de la machine utilisée pour tester strapi, avec un Firefox / mozilla. 
+  marguerite_npm_bdd: 
+    # https://hub.docker.com/r/couchbase/server/
+    image: couchbase/server 
+    ports:
+      - 8091-8094:8091-8094
+      - 11210:11210
+    restart: always
+  # la BDD devra donc être accédée, par le conteneur "marguerite_npm" , via le private network docker, avec la requête http://marguerite_npm_bdd:8091/pools
+  marguerite_npm:
+    # https://github.com/npm/npm-registry-couchapp
+    # image: marguerite/npm-registry:1.0.0
+    build: ./build-img-docker/all-in-one/marguerite/npm
+    args:
+      - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT=https://github.com/Jean-Baptiste-Lasselle/npm-registry-couchapp
+      - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
+      # le nom d'hôte réseau "marguerite_npm_bdd", est résolu, dans le conteneur "marguerite_npm", par docker, et non par une configuration du reverse proxy NGINX. 
+      # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
+      - HOTE_RESEAU_DU_REGISTRY_NPM_DEFAUT=0.0.0.0
+      - NO_PORT_DU_REGISTRY_NPM_DEFAUT=5984
+      - HOTE_RESEAU_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite_npm_bdd
+      - NO_PORT_BDD_DU_REGISTRY_NPM_DEFAUT=8091
+      - USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
+      - USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
+      - FIRST_USER_NAME_DU_REGISTRY_NPM_DEFAUT=admin
+      - FIRST_USER_PWD_DU_REGISTRY_NPM_DEFAUT=password
+    environment:
+      - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=https://github.com/npm/npm-registry-couchapp
+      # https://github.com/npm/npm-registry-couchapp/releases/tag/v2.7.1
+      - VERSION_CODE_SOURCE_NPMREGISTRY=2.7.0
+      - HOTE_RESEAU_DU_REGISTRY_NPM=0.0.0.0
+      - NO_PORT_DU_REGISTRY_NPM=5984
+      - HOTE_RESEAU_BDD_DU_REGISTRY_NPM=marguerite_npm_bdd
+      - NO_PORT_BDD_DU_REGISTRY_NPM=8091
+      - USER_NAME_BDD_DU_REGISTRY_NPM=marguerite
+      - USER_PWD_BDD_DU_REGISTRY_NPM=marguerite
+      # - le premier utilsiateur existant après installation / démarrage du registry npm privé
+      - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
+      - FIRST_USER_PWD_DU_REGISTRY_NPM=password
+    depends_on:
+      - marguerite_npm_bdd
+    restart: always
+  build_bootstrapi:
+    # image: pre/bootstrapi:1.0.0
     build: ./build-img-docker/all-in-one/preboot/
+    args: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
+      - URI_REPO_GIT_DEVELOPPEURS_DEFAUT=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+      - URI_PRIVATE_NPM_REGISTRY_DEFAUT=http://marguerite_npm:5984/registry/_design/app/_rewrite
+    environment: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
+      - URI_REPO_GIT_DEVELOPPEURS=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+      - URI_PRIVATE_NPM_REGISTRY=http://marguerite_npm:5984/registry/_design/app/_rewrite
+    depends_on:
+      - marguerite_npm
   bootstrapi:
     # image: boot/strapi
     build: ./build-img-docker/all-in-one
@@ -16,13 +67,15 @@ services:
       - DATABASE_USERNAME=
       - DATABASE_PASSWORD=
       - HOST=localhost
+      # numéro de version de publication dans le registry NPM privé, via "prebootstrapi" (qui deviendra un Jenkins Pipeline)
+      - NUMERO_VERSION_BOOTSTRAPI=1.0.0
     ports:
       - 1337:1337
 #    volumes:
       #- ./strapi-app:/usr/src/api/strapi-app
       #- /usr/src/api/strapi-app/node_modules
     depends_on:
-      - prebootstrapi
+      - build_bootstrapi
       - bdd_strapi
 
     restart: always

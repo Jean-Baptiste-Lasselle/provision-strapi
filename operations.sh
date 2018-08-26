@@ -13,7 +13,7 @@ export CONTEXTE_BUILD_DOCKER=$MAISON/build-img-docker/all-in-one
 export NOM_COMPLET_IMAGE_DOCKER=$NOM_ORG/$NOM_IMAGE:$VERSION_IMAGE
 # export DOCKERFILE_BOOTSTRAPI_ONE=$MAISON/all-in-one.bootstrapi.dockerfile
 export DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE=$MAISON/all-in-one.bootstrapi.docker-compose.yml
-cp
+
 # - pour plus tard, la séparation admin et apis.
 
 export NOM_CONTNEU_BACKEND_ADMIN=boostrapi-admin-backend
@@ -32,4 +32,4 @@ docker-compse -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE build bootstrapi
 
 # - on lance le conteneur
 
-docker-compose up
+docker-compose up -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE
