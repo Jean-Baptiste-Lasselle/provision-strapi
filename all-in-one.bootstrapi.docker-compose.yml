@@ -10,7 +10,7 @@ services:
     # https://developer.couchbase.com/documentation/server/4.1/install/setup-cli-rest.html
     # image: couchbase/server 
     build:
-      - context: ./build-img-docker/all-in-one/marguerite/npm-couchdb/
+      context: ./build-img-docker/all-in-one/marguerite/npm-couchdb/
     ports:
       - 8091-8094:8091-8094
       - 11210:11210
