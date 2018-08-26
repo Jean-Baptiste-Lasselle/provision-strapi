@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:7
 LABEL maintainer="Jean-Baptiste Lasselle <jean.baptiste.lasselle.it@gmail.com>" \
       org.label-schema.vendor="Jean-Baptiste Lasselle - Fullstack Devops Architect" \
       org.label-schema.name="Dockerized NPM private registry, as a romantic pétale de marguerite" \
