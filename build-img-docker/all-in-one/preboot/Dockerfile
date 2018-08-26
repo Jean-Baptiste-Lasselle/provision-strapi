@@ -21,10 +21,10 @@ RUN yum update -y && yum install - y wget git curl
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
 
-RUN yum install epel-release
-RUN yum install nodejs
+RUN yum install -y epel-release
+RUN yum install -y nodejs
 RUN node --version
-RUN yum install npm
+RUN yum install -y npm
 RUN npm --version
 RUN echo " "
 RUN echo " "

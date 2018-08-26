@@ -34,20 +34,23 @@ ARG  USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT
 ENV  USER_NAME_BDD_DU_REGISTRY_NPM=$USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT
 ARG  USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT
 ENV  USER_PWD_BDD_DU_REGISTRY_NPM=$USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT
+
+# - system setup 
+RUN yum update -y && yum install -y curl wget tree
 # On clone, on build, et on run, le registry private NPM
 
 # - build from source 
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
 
-RUN yum install epel-release
-RUN yum install nodejs
+RUN yum install -y epel-release
+RUN yum install -y nodejs
 RUN echo " "
 RUN echo " Version NodeJS : "
 RUN echo " "
 RUN node --version
 RUN echo " "
-RUN yum install npm
+RUN yum install -y npm
 RUN echo " "
 RUN echo " Version NPM : "
 RUN echo " "
