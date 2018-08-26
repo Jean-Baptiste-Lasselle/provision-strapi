@@ -31,4 +31,4 @@ mkdir -p $CONTEXTE_BUILD_DOCKER
 
 # - on lance 
 
-docker-compose up -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE
+docker-compose -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE up
