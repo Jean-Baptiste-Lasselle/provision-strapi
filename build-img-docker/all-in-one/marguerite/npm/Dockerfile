@@ -58,7 +58,7 @@ RUN npm --version
 RUN echo " "
 RUN echo " "
 RUN mkdir -p build-from-source
-RUN WORKDIR build-from-source
+WORKDIR build-from-source
 RUN echo " "
 RUN echo " URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=$URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY "
 RUN echo " "

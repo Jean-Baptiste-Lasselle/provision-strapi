@@ -8,13 +8,16 @@ LABEL maintainer="Jean-Baptiste Lasselle <jean.baptiste.lasselle.it@gmail.com>" 
       org.label-schema.vcs-url="https://github.com/Jean-Baptiste-Lasselle/provision-strapi" \
       org.label-schema.version=latest \
       org.label-schema.schema-version="1.0.0"
-ENV URI_REPO_GIT_DEVELOPPEURS=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+
+ARG URI_REPO_GIT_DEVELOPPEURS_DEFAUT
+ENV URI_REPO_GIT_DEVELOPPEURS=$URI_REPO_GIT_DEVELOPPEURS_DEFAUT
 # [npm.kytes.io] amène vers un conteneur dans le même hôte docker, par configuration de 3 noeuds réseau:
 #  1 - le reverse proxy NGINX qui définit que toute requête lui arrviant, avec le domaine npm.kytes.io, est redirigée vers le contenur registry npm kytes
 #  2 - le serveur DNS, désignons le par "KYTES_DNS", qui  associe le domaine npm.kytes.io, à l'adresse IP de l'hôte docker sur lequel se trovue le conteneur NGINX et le conteneur NPM registry
 #  3 - toute machine qui voudrta accéder à npm.kytes.io, devra comporter dans sa configuration de carte réseau : dnsnameservers $ADRESSE_IP_DU_SERVEUR_KYTES_DNS
 
-ENV URI_REGISTRY_NPM=https://npm.kytes.io
+ARG URI_PRIVATE_NPM_REGISTRY_DEFAUT
+ENV URI_PRIVATE_NPM_REGISTRY=$URI_PRIVATE_NPM_REGISTRY_DEFAUT
 
 RUN yum update -y && yum install - y wget git curl  
 
@@ -28,8 +31,10 @@ RUN yum install -y npm
 RUN npm --version
 RUN echo " "
 RUN echo " "
+# - configuration du registry privé NPM
+RUN npm config set registry = "$URI_PRIVATE_NPM_REGISTRY"
 RUN mkdir -p projet-developpeur
-RUN WORKDIR projet-developpeur
+WORKDIR projet-developpeur
 RUN git clone "$URI_REPO_GIT_DEVELOPPEURS" .
 RUN echo " "
 RUN echo " "

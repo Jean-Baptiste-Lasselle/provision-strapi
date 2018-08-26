@@ -49,7 +49,7 @@ services:
       - marguerite_npm_bdd
     restart: always
   build_bootstrapi:
-    image: pre/bootstrapi:1.0.0
+    image: build/bootstrapi:1.0.0
     build: 
       context: ./build-img-docker/all-in-one/preboot/
       args: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
