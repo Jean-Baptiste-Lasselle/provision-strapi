@@ -48,10 +48,10 @@ RUN echo " - ++ CYCLE DEV ++ on commence par suivre à la lettre, la procédure 
 # cf. 
 RUN echo " "
 RUN echo " "
-RUN echo "[ RUN : npm build]"
+RUN echo "[ RUN : npm install && npm build]"
 RUN echo " "
 RUN echo " "
-RUN npm build
+RUN npm install && npm build
 RUN echo " "
 RUN echo " "
 RUN echo " "
@@ -101,7 +101,7 @@ RUN echo " "
 RUN echo "[ RUN : npm run setup]"
 RUN echo " "
 RUN echo " "
-RUN npm run setup
+# RUN npm run setup
 RUN echo " "
 RUN echo " "
 RUN echo " "
@@ -109,7 +109,7 @@ RUN echo " "
 RUN echo "[ RUN : npm run setup --plugins]"
 RUN echo " "
 RUN echo " "
-RUN npm run setup --plugins
+# RUN npm run setup --plugins
 RUN echo " "
 RUN echo " "
 RUN echo " "
@@ -117,7 +117,7 @@ RUN echo " "
 RUN echo "[ RUN : npm run setup --plugins]"
 RUN echo " "
 RUN echo " "
-RUN npm run setup --plugins
+# RUN npm run setup --plugins
 RUN echo " "
 RUN echo " "
 
