@@ -31,8 +31,8 @@ RUN yum install -y npm
 RUN npm --version
 RUN echo " "
 RUN echo " "
-# - configuration du registry privé NPM
-RUN npm config set registry = "$URI_PRIVATE_NPM_REGISTRY"
+# - configuration du registry privé NPM : ici on ne veut pas faire le pull, on veut juste publier, donc on n'utilisera le private registry pour la commande publish
+# RUN npm config set registry = "$URI_PRIVATE_NPM_REGISTRY"
 RUN mkdir -p projet-developpeur
 WORKDIR projet-developpeur
 RUN git clone "$URI_REPO_GIT_DEVELOPPEURS" .
@@ -138,7 +138,7 @@ RUN echo " "
 # - ++ CYCLE DEV ++ enfin on réalise la procédure de publication sur le registry NPM privé : ds l'infra entreprise
 # - suppose qu'NPM a été configuré, après son installation, ppour faire usage du registry privé npm.marguerite.io
 RUN npm pack
-RUN npm publish
+RUN npm publish --registry $URI_PRIVATE_NPM_REGISTRY
 # - on pourra aussi réaliser l'exécution du build à l'exécution du conteneur
 # CMD [./build-and-publish-bootstrapi.sh]
 # Ce travail sera fait par le Jenkins pipeline, déclenché par un push sur le git repo du code source boostrapi, dont

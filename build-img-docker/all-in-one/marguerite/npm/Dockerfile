@@ -39,6 +39,13 @@ ENV  USER_PWD_BDD_DU_REGISTRY_NPM=$USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT
 RUN yum update -y && yum install -y curl wget tree git
 # On clone, on build, et on run, le registry private NPM
 
+# installation de couchbase 
+RUN echo " Installation de CouchBAse : https://developer.couchbase.com/documentation/server/4.1/install/setup-cli-rest.html "
+RUN echo "You need CouchDB version 1.4.0 or higher. 1.5.0 or higher is best. So i'm gonna install it for you."
+RUN echo " +++ // Setup Administrator username and password"
+RUN curl -v -X POST http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/settings/web -d password=$USER_PWD_BDD_DU_REGISTRY_NPM -d username=$USER_NAME_BDD_DU_REGISTRY_NPM
+RUN echo " +++ Once you have CouchDB installed, create a new database: curl -X PUT http://$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/registry "
+RUN curl -X PUT http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
 # - build from source 
 RUN # - Installation configuration nodejs / npm 
 # - cycle de build ("build lifecycle") par défaut de NPM : [https://docs.npmjs.com/misc/scripts]
@@ -72,9 +79,13 @@ RUN echo " exactes instructions de : [https://github.com/npm/npm-registry-coucha
 # RUN npm config set couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
 
 RUN npm install
-RUN npm start --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
-RUN npm run load --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
-RUN npm run copy --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
+# RUN npm start --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
+# RUN npm run load --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
+# RUN npm run copy --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
+# - Je change l'approche, il s'agit bien de la BDD.
+RUN npm start --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
+RUN npm run load --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
+RUN npm run copy --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
 
 
 EXPOSE 5984

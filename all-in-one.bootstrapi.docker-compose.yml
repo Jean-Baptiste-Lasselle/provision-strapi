@@ -5,6 +5,9 @@ services:
 # TODO : faire la recette terraform / ansible pour provisionner la configuration du serveur DNS dans une VM dédiée, différente de l'hôte Docker, et la configuration du serveur DNS de la machine utilisée pour tester strapi, avec un Firefox / mozilla. 
   marguerite_npm_bdd: 
     # https://hub.docker.com/r/couchbase/server/
+    # https://developer.couchbase.com/documentation/server/3.x/admin/CLI/cbreset_password_tool.html
+    # https://developer.couchbase.com/documentation/server/4.1/install/init-setup.html ==>> tout particulièrement pour réaliser la configuration du user initial à l'installation de couchbase 
+    # https://developer.couchbase.com/documentation/server/4.1/install/setup-cli-rest.html
     image: couchbase/server 
     ports:
       - 8091-8094:8091-8094
@@ -44,7 +47,6 @@ services:
       - NO_PORT_BDD_DU_REGISTRY_NPM=8091
       - USER_NAME_BDD_DU_REGISTRY_NPM=marguerite
       - USER_PWD_BDD_DU_REGISTRY_NPM=marguerite
-
     depends_on:
       - marguerite_npm_bdd
     restart: always
