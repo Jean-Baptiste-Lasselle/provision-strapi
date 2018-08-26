@@ -33,8 +33,8 @@ RUN echo " "
 RUN echo " "
 # - configuration du registry privé NPM : ici on ne veut pas faire le pull, on veut juste publier, donc on n'utilisera le private registry pour la commande publish
 # RUN npm config set registry = "$URI_PRIVATE_NPM_REGISTRY"
-RUN mkdir -p projet-developpeur
-WORKDIR projet-developpeur
+RUN mkdir -p /opt/projet-developpeur
+WORKDIR /opt/projet-developpeur
 RUN git clone "$URI_REPO_GIT_DEVELOPPEURS" .
 RUN echo " "
 RUN echo " "
@@ -139,13 +139,13 @@ RUN echo " "
 # - suppose qu'NPM a été configuré, après son installation, ppour faire usage du registry privé npm.marguerite.io
 # RUN npm pack
 # RUN npm publish --registry $URI_PRIVATE_NPM_REGISTRY
-ADD build-and-publish-bootstrapi.sh .
-RUN chmod +x ./build-and-publish-bootstrapi.sh
+ADD build-and-publish-bootstrapi.sh /opt/projet-developpeur
+RUN chmod +x /opt/projet-developpeur/build-and-publish-bootstrapi.sh
+RUN cp ./build-and-publish-bootstrapi.sh /opt/marguerite/build-and-publish-bootstrapi.sh
 # - on pourra aussi réaliser l'exécution du build à l'exécution du conteneur
 # Ce travail sera fait par le Jenkins pipeline, déclenché par un push sur le git repo du code source boostrapi, dont
 # la première version (le premier commit & push) provient de'une version bien spécifique de l'officiel strapi.
 CMD [./build-and-publish-bootstrapi.sh]
-# CMD ["/bin/bash"]
 
 
 
