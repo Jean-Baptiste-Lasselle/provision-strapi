@@ -77,7 +77,6 @@ RUN echo " exactes instructions de : [https://github.com/npm/npm-registry-coucha
 
 # Ci-dessous, le RUN équivalent à ajouter dans le fichier de conf "$HOME/.npmrc" : [_npm-registry-couchapp:couch=http://admin:password@localhost:5984/registry = "$URI_PRIVATE_NPM_REGISTRY"]
 # RUN npm config set couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
-
 RUN npm install
 # RUN npm start --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
 # RUN npm run load --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
