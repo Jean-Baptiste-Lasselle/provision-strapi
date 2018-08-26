@@ -17,7 +17,7 @@ services:
     build: 
       context: ./build-img-docker/all-in-one/marguerite/npm/
       args:
-        - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT="https://github.com/npm/npm-registry-couchapp"
+        - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT=https://github.com/npm/npm-registry-couchapp
         - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
         # le nom d'hôte réseau "marguerite_npm_bdd", est résolu, dans le conteneur "marguerite_npm", par docker, et non par une configuration du reverse proxy NGINX. 
         # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
@@ -31,7 +31,7 @@ services:
         - FIRST_USER_PWD_DU_REGISTRY_NPM_DEFAUT=password
     environment:
       # - Le code source de npm registry couchbase // https://github.com/npm/npm-registry-couchapp/releases/tag/v2.7.1
-      - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY="https://github.com/npm/npm-registry-couchapp"
+      - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=https://github.com/npm/npm-registry-couchapp
       - VERSION_CODE_SOURCE_NPMREGISTRY=2.7.0
       # - L'hôte réseau serveur, pour le npm registry privé
       - HOTE_RESEAU_DU_REGISTRY_NPM=0.0.0.0
@@ -53,11 +53,11 @@ services:
     build: 
       context: ./build-img-docker/all-in-one/preboot/
       args: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
-        - URI_REPO_GIT_DEVELOPPEURS_DEFAUT="https://github.com/Jean-Baptiste-Lasselle/bootstrapi"
-        - URI_PRIVATE_NPM_REGISTRY_DEFAUT="http://marguerite_npm:5984/registry/_design/app/_rewrite"
+        - URI_REPO_GIT_DEVELOPPEURS_DEFAUT=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+        - URI_PRIVATE_NPM_REGISTRY_DEFAUT=http://marguerite_npm:5984/registry/_design/app/_rewrite
     environment: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
-      - URI_REPO_GIT_DEVELOPPEURS="https://github.com/Jean-Baptiste-Lasselle/bootstrapi"
-      - URI_PRIVATE_NPM_REGISTRY="http://marguerite_npm:5984/registry/_design/app/_rewrite"
+      - URI_REPO_GIT_DEVELOPPEURS=https://github.com/Jean-Baptiste-Lasselle/bootstrapi
+      - URI_PRIVATE_NPM_REGISTRY=http://marguerite_npm:5984/registry/_design/app/_rewrite
     depends_on:
       - marguerite_npm
   bootstrapi:
