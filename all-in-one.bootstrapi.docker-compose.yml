@@ -21,7 +21,7 @@ services:
         - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
         # le nom d'hôte réseau "marguerite_npm_bdd", est résolu, dans le conteneur "marguerite_npm", par docker, et non par une configuration du reverse proxy NGINX. 
         # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
-        - HOTE_RESEAU_DU_REGISTRY_NPM_DEFAUT=0.0.0.0
+        - HOTE_RESEAU_DU_REGISTRY_NPM_DEFAUT=localhost
         - NO_PORT_DU_REGISTRY_NPM_DEFAUT=5984
         - HOTE_RESEAU_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite_npm_bdd
         - NO_PORT_BDD_DU_REGISTRY_NPM_DEFAUT=8091
@@ -34,7 +34,7 @@ services:
       - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=https://github.com/npm/npm-registry-couchapp
       - VERSION_CODE_SOURCE_NPMREGISTRY=2.7.0
       # - L'hôte réseau serveur, pour le npm registry privé
-      - HOTE_RESEAU_DU_REGISTRY_NPM=0.0.0.0
+      - HOTE_RESEAU_DU_REGISTRY_NPM=localhost
       - NO_PORT_DU_REGISTRY_NPM=5984
       # - le premier utilsiateur existant après installation / démarrage du registry npm privé
       - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
