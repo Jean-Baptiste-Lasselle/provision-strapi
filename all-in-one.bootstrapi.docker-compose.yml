@@ -14,7 +14,8 @@ services:
   marguerite_npm:
     # https://github.com/npm/npm-registry-couchapp
     image: marguerite/npm-registry:1.0.0
-    build: ./build-img-docker/all-in-one/marguerite/npm/
+    build: 
+      context: ./build-img-docker/all-in-one/marguerite/npm/
       args:
         - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY_DEFAUT="https://github.com/Jean-Baptiste-Lasselle/npm-registry-couchapp"
         - VERSION_CODE_SOURCE_NPMREGISTRY_DEFAUT=2.7.0
@@ -27,20 +28,23 @@ services:
         - USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
         - USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
         - FIRST_USER_NAME_DU_REGISTRY_NPM_DEFAUT=admin
-       - FIRST_USER_PWD_DU_REGISTRY_NPM_DEFAUT=password
+        - FIRST_USER_PWD_DU_REGISTRY_NPM_DEFAUT=password
     environment:
+      # - Le code source de npm registry couchbase // https://github.com/npm/npm-registry-couchapp/releases/tag/v2.7.1
       - URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY="https://github.com/npm/npm-registry-couchapp"
-      # https://github.com/npm/npm-registry-couchapp/releases/tag/v2.7.1
       - VERSION_CODE_SOURCE_NPMREGISTRY=2.7.0
+      # - L'hôte réseau serveur, pour le npm registry privé
       - HOTE_RESEAU_DU_REGISTRY_NPM=0.0.0.0
       - NO_PORT_DU_REGISTRY_NPM=5984
+      # - le premier utilsiateur existant après installation / démarrage du registry npm privé
+      - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
+      - FIRST_USER_PWD_DU_REGISTRY_NPM=password
+      # - La BDD CoucheBase, du registry NPM
       - HOTE_RESEAU_BDD_DU_REGISTRY_NPM=marguerite_npm_bdd
       - NO_PORT_BDD_DU_REGISTRY_NPM=8091
       - USER_NAME_BDD_DU_REGISTRY_NPM=marguerite
       - USER_PWD_BDD_DU_REGISTRY_NPM=marguerite
-      # - le premier utilsiateur existant après installation / démarrage du registry npm privé
-      - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
-      - FIRST_USER_PWD_DU_REGISTRY_NPM=password
+
     depends_on:
       - marguerite_npm_bdd
     restart: always
@@ -57,7 +61,8 @@ services:
       - marguerite_npm
   bootstrapi:
     # image: boot/strapi
-    build: ./build-img-docker/all-in-one/
+    build: 
+      context: ./build-img-docker/all-in-one/
     environment:
       - APP_NAME=instance-bootstrapi
       - DATABASE_CLIENT=mongo
