@@ -26,7 +26,7 @@ mkdir -p $CONTEXTE_BUILD_DOCKER
 
 # - on build l'image docker bootstrapi avec docler-compose  : $CONTEXTE_BUILD_DOCKER se trouve dans le fichier docker-compose.yml
 
-docker-compse -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE build bootstrapi 
+docker-compose -f $DOCKERCOMPOSEFILE_BOOTSTRAPI_ONE build bootstrapi 
 # ---tag $NOM_COMPLET_IMAGE_DOCKER -f $DOCKERFILE_BOOTSTRAPI_ONE $CONTEXTE_BUILD_DOCKER
 
 
