@@ -75,27 +75,10 @@ RUN echo " "
 RUN npm --version
 RUN echo " "
 RUN echo " "
-RUN mkdir -p /opt/marguerite/npm-registry/
-WORKDIR /opt/marguerite/npm-registry/
-RUN echo " "
-RUN echo " URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=$URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY "
-RUN echo " "
-RUN git clone     $URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY .
-RUN echo " "
-# - on build
-RUN echo " build from source jbl / npm registry couhapp : "
-RUN echo " exactes instructions de : [https://github.com/npm/npm-registry-couchapp] " 
 
-# Ci-dessous, le RUN équivalent à ajouter dans le fichier de conf "$HOME/.npmrc" : [_npm-registry-couchapp:couch=http://admin:password@localhost:5984/registry = "$URI_PRIVATE_NPM_REGISTRY"]
-# RUN npm config set couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/registry
-RUN npm install
-# RUN npm start --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
-# RUN npm run load --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
-# RUN npm run copy --npm-registry-couchapp:couch=http://$FIRST_USER_NAME_DU_REGISTRY_NPM:$FIRST_USER_PWD_DU_REGISTRY_NPM@$HOTE_RESEAU_BDD_DU_REGISTRY_NPM:$NO_PORT_BDD_DU_REGISTRY_NPM/margerite-registry
-# - Je change l'approche, il s'agit bien de la BDD.
-RUN npm start --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
-RUN npm run load --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
-RUN npm run copy --npm-registry-couchapp:couch=http://$USER_NAME_BDD_DU_REGISTRY_NPM:$USER_PWD_BDD_DU_REGISTRY_NPM@$HOTE_RESEAU_DU_REGISTRY_NPM:$NO_PORT_DU_REGISTRY_NPM/margerite-registry
-
+ADD marguerite-npm.sh .
+RUN chmod +x ./marguerite-npm.sh
 
 EXPOSE 5984
+
+CMD ["./marguerite-npm.sh"]
