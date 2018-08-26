@@ -62,7 +62,7 @@ WORKDIR build-from-source
 RUN echo " "
 RUN echo " URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY=$URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY "
 RUN echo " "
-RUN git clone "$URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY" .
+RUN git clone     $URI_REPO_GIT_OFFICIEL_CODE_SOURCE_NPMREGISTRY .
 RUN echo " "
 # - on build
 RUN echo " build from source jbl / npm registry couhapp : "
