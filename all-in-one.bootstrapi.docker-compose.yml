@@ -50,7 +50,8 @@ services:
     restart: always
   build_bootstrapi:
     image: pre/bootstrapi:1.0.0
-    build: ./build-img-docker/all-in-one/preboot/
+    build: 
+      context: ./build-img-docker/all-in-one/preboot/
       args: # je préfèrerai que cette URL soit chargé edynamiquement, avec la provision Terraform / Ansible de l'instance marguerite Gitlab
         - URI_REPO_GIT_DEVELOPPEURS_DEFAUT="https://github.com/Jean-Baptiste-Lasselle/bootstrapi"
         - URI_PRIVATE_NPM_REGISTRY_DEFAUT="http://marguerite_npm:5984/registry/_design/app/_rewrite"
