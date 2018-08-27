@@ -165,6 +165,8 @@ cf. le ./*docker-compose.yml correspondant à la release
 
 # Dernière erreur
 
+Principal problème en l'état :  le conteneur CouchBase bdd du registry privé docker, est isntable. Il empêche le fonctionnement du registry NPM privé.
+
 
 ```
 Step 28/111 : RUN npm run build && npm run build --plugins && npm run setup --plugins
