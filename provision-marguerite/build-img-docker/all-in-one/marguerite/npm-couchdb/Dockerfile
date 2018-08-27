@@ -1,7 +1,9 @@
 FROM couchbase/server
 # Ajout du fichier de configuration
 RUN echo " - VERIF EXISTENCE /opt/couchbase/etc/ " && ls -all /opt/couchbase/etc/
-
+ADD ./etc/security/limits.conf .
+RUN rm -f /etc/security/limits.conf
+RUN cp ./limits.conf /etc/security/
 # RUN rm-f /etc/couchdb/local.ini
 ADD local.ini .
 RUN cp -f ./local.ini /opt/couchbase/etc/

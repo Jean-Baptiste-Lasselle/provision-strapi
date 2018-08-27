@@ -167,23 +167,29 @@ cf. le ./*docker-compose.yml correspondant à la release
 
 
 ```
-Step 28/111 : RUN npm run build && npm run build --plugins && npm run setup --plugins
- ---> Running in 71708f73254d
-npm ERR! Linux 3.10.0-862.el7.x86_64
-npm ERR! argv "/usr/bin/node" "/usr/bin/npm" "run" "build"
-npm ERR! node v6.14.3
-npm ERR! npm  v3.10.10
+marguerite_npm_1            | > npm-registry-couchapp@2.7.1 copy /opt/marguerite/npm-registry
+marguerite_npm_1            | > bash ./copy.sh
+marguerite_npm_1            | 
+marguerite_npm_1            | Did you already run the load-views.sh script? (type 'yes')
+marguerite_npm_1            | do that first.
+marguerite_npm_1            | 
+marguerite_npm_1            | npm ERR! Linux 3.10.0-862.el7.x86_64
+marguerite_npm_1            | npm ERR! argv "/usr/bin/node" "/usr/bin/npm" "run" "copy" "--npm-registry-couchapp:couch=http://marguerite:marguerite@marguerite_npm_bdd:8091/margerite-registry"
+marguerite_npm_1            | npm ERR! node v6.14.3
+marguerite_npm_1            | npm ERR! npm  v3.10.10
+marguerite_npm_1            | npm ERR! code ELIFECYCLE
+marguerite_npm_1            | npm ERR! npm-registry-couchapp@2.7.1 copy: `bash ./copy.sh`
+```
+Mais aussi : 
+```
 
-npm ERR! missing script: build
-npm ERR! 
-npm ERR! If you need help, you may report this error at:
-npm ERR!     <https://github.com/npm/npm/issues>
 
-npm ERR! Please include the following file with any support request:
-npm ERR!     /projet-developpeur/npm-debug.log
-ERROR: Service 'build_bootstrapi' failed to build: The command '/bin/sh -c npm run build && npm run build --plugins && npm run setup --plugins' returned a non-zero code: 1
-[jibl@pc-100 provision-bootstrapi]$ 
+marguerite_npm_1            | > npm-registry-couchapp@2.7.1 load /opt/marguerite/npm-registry
+marguerite_npm_1            | > bash ./load-views.sh
+marguerite_npm_1            | 
+marguerite_npm_1            | ./load-views.sh: line 33: dig: command not found
 
 ```
+
 
 

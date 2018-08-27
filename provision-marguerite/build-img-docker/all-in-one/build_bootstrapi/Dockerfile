@@ -60,12 +60,14 @@ RUN echo " - ++ CYCLE DEV ++ puis suit à la lettre, la procédure indiquée pou
 # cf. 
 RUN echo " "
 RUN echo " "
-RUN echo "[ RUN : npm install && npm build]"
-RUN echo "[ RUN : npm run setup --build]"
+# RUN echo "[ RUN : npm install && npm build]"
+# RUN echo "[ RUN : npm run setup --build]"
+RUN echo "[ RUN : npm install]"
 RUN echo " "
 RUN echo " "
-# RUN npm install 
-RUN npm run setup --build
+# RUN npm install && npm build 
+# RUN npm run setup --build
+RUN npm install
 RUN echo " "
 RUN echo " "
 RUN echo " "
@@ -104,7 +106,6 @@ RUN echo " "
 # RUN npm publish --registry $URI_PRIVATE_NPM_REGISTRY
 ADD build-and-publish-bootstrapi.sh /opt/projet-developpeur
 RUN chmod +x /opt/projet-developpeur/build-and-publish-bootstrapi.sh
-RUN cp ./build-and-publish-bootstrapi.sh /opt/marguerite/build-and-publish-bootstrapi.sh
 # - on pourra aussi réaliser l'exécution du build à l'exécution du conteneur
 # Ce travail sera fait par le Jenkins pipeline, déclenché par un push sur le git repo du code source boostrapi, dont
 # la première version (le premier commit & push) provient de'une version bien spécifique de l'officiel strapi.

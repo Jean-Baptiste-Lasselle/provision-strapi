@@ -36,7 +36,7 @@ ARG  USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT
 ENV  USER_PWD_BDD_DU_REGISTRY_NPM=$USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT
 
 # - system setup 
-RUN yum update -y && yum install -y curl wget tree git
+RUN yum update -y && yum install -y curl wget tree git bind-utils
 # On clone, on build, et on run, le registry private NPM
 
 

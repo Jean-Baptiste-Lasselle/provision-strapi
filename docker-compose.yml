@@ -49,11 +49,10 @@ services:
     build:
       context: ./provision-marguerite/build-img-docker/all-in-one/marguerite/nginx/
     ports:
-      # - 8091-8094:8091-8094
       - 80:80
     volumes:
       # - /host/path/nginx.conf:/etc/nginx/nginx.conf:rw
-      - /host/path/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/:ro
     restart: always
 # TODO :  rajouter le service NGINX pour servir toutes les URLs, 
 # TODO : faire la recette terraform / ansible pour provisionner la configuration du serveur DNS dans une VM dédiée, différente de l'hôte Docker, et la configuration du serveur DNS de la machine utilisée pour tester strapi, avec un Firefox / mozilla. 
@@ -84,7 +83,7 @@ services:
         # Seul le conteneur "marguerite_npm", a besoin d'accéder au contenur contenant la BDD couchbase. Aucune autre type d'accès n'est nécessaire.
         - HOTE_RESEAU_DU_REGISTRY_NPM_DEFAUT=localhost
         - NO_PORT_DU_REGISTRY_NPM_DEFAUT=5984
-        - HOTE_RESEAU_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite_npm_bdd
+        - HOTE_RESEAU_BDD_DU_REGISTRY_NPM_DEFAUT=provision-marguerite_marguerite_npm_bdd_1
         - NO_PORT_BDD_DU_REGISTRY_NPM_DEFAUT=8091
         - USER_NAME_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
         - USER_PWD_BDD_DU_REGISTRY_NPM_DEFAUT=marguerite
@@ -101,7 +100,7 @@ services:
       - FIRST_USER_NAME_DU_REGISTRY_NPM=admin
       - FIRST_USER_PWD_DU_REGISTRY_NPM=password
       # - La BDD CoucheBase, du registry NPM
-      - HOTE_RESEAU_BDD_DU_REGISTRY_NPM=marguerite_npm_bdd
+      - HOTE_RESEAU_BDD_DU_REGISTRY_NPM=provision-marguerite_marguerite_npm_bdd_1
       - NO_PORT_BDD_DU_REGISTRY_NPM=8091
       - USER_NAME_BDD_DU_REGISTRY_NPM=marguerite
       - USER_PWD_BDD_DU_REGISTRY_NPM=marguerite
